@@ -11,5 +11,3 @@ Feature: login
     Examples:
       | email             | password  |
       | admin@gmail.com   | @12345678 |
-
-
