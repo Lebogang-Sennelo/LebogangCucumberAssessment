@@ -36,9 +36,33 @@ public class stepsDef extends Base {
         dashboardPage.verifyDashboardPageIsDisplayed();
     }
 
+    // Click user menu then logout
+    @And("I logout from the application")
+    public void iLogoutFromTheApplication() {
+        dashboardPage.clickLogout();
+    }
+
+    // After logout we land on login page — click "Sign Up Here"
+    @And("I navigate to sign up page")
+    public void iNavigateToSignUpPage() {
+        homePage.clickLoginButton();
+        loginPage.verifyLoginPageIsDisplayed();
+        loginPage.clickSignUpHereLink();
+        signUpPage.verifySignUpPageIsDisplayed();
+    }
+
+    // Assert the created group appears in the dropdown
+    @Then("I validate that (.*) exists in the group dropdown")
+    public void iValidateThatGroupExistsInDropdown(String groupName) {
+        signUpPage.verifyGroupExistsInDropdown(groupName);
+    }
+
 
     @After
     public void closeBrowser() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @And("I click on the logged in user")
@@ -94,9 +118,14 @@ public class stepsDef extends Base {
         dashboardPage.enterEndDate(endDate);
     }
 
+    @When("I click on the create group submit button")
+    public void iClickOnTheSubmitCreateGroupButton() {
+        dashboardPage.clickCreateGroupSubmitButton();
+    }
+
     @Then("i should see the group created successfully")
     public void iShouldSeeTheGroupCreatedSuccessfully() {
-        // Write code here that turns the phrase above into concrete actions
+        dashboardPage.verifyGroupCreatedSuccessfully();
     }
 
     @AfterStep

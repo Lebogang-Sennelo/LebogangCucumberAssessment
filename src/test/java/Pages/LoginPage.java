@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
+import static org.openqa.selenium.support.ui.ExpectedConditions.elementToBeClickable;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class LoginPage {
@@ -23,6 +24,9 @@ public class LoginPage {
 
     @FindBy(id ="login-submit")
     WebElement loginButton;
+
+    @FindBy (linkText = "Sign Up Here")
+    WebElement signUpHereLink;
 
     public LoginPage(WebDriver driver) {
         this.driver = driver;
@@ -45,7 +49,12 @@ public class LoginPage {
         loginButton.click();
     }
 
-
+    // Click "Sign Up Here" to navigate to the sign-up form
+    public void clickSignUpHereLink() {
+        new WebDriverWait(driver, Duration.ofSeconds(15))
+                .until(elementToBeClickable(signUpHereLink));
+        signUpHereLink.click();
+    }
 
 
 }

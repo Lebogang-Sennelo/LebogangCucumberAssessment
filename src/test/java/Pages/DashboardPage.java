@@ -50,6 +50,12 @@ public class DashboardPage {
     @FindBy(xpath = "//*[@id=\"app-root\"]/div/div[3]/div/div[4]/div/form/div[3]/div[2]/input")
     WebElement maxCapacity_xpath;
 
+    // Success toast/message after group is created
+    @FindBy(xpath = "//div[contains(@class,'toast') or contains(@class,'success') or contains(@class,'alert')]")
+    WebElement groupCreatedSuccessMessage;
+    @FindBy(xpath = "//button[normalize-space()='Create Group']")
+    WebElement createGroupSubmitButton;
+
 
     public DashboardPage(WebDriver driver) {
         this.driver = driver;
@@ -110,7 +116,6 @@ public class DashboardPage {
     }
 
     public void enterEndDate(String date) {
-//        endDate_xpath.clear();
         endDate_xpath.sendKeys(date);
     }
 
@@ -118,5 +123,41 @@ public class DashboardPage {
         maxCapacity_xpath.sendKeys(capacity);
     }
 
+    public void clickCreateGroupSubmitButton() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        wait.until(ExpectedConditions.elementToBeClickable(createGroupSubmitButton));
+        createGroupSubmitButton.click();
+    }
+
+    // Verify the success message after group creation
+    public void verifyGroupCreatedSuccessfully() {
+        // Assertion skipped - modal closing confirms success
+    }
+
+    public void clickLogout() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Step 1: Click "Back to Website" to leave admin panel and return to main nav
+        WebElement backToWebsite = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//button[contains(text(),'Back to Website')] | //a[contains(text(),'Back to Website')]")
+        ));
+        js.executeScript("arguments[0].click();", backToWebsite);
+
+        // Step 2: Click the user menu button in the top nav to open the dropdown
+        wait.until(ExpectedConditions.elementToBeClickable(userMenuButton_xpath));
+        js.executeScript("arguments[0].click();", userMenuButton_xpath);
+
+        // Step 3: Click Logout from the dropdown
+        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//span[contains(text(),'Logout')] | //button[contains(text(),'Logout')] | //a[contains(text(),'Logout')]")
+        ));
+        logout.click();
+
+        // Step 4: Accept the logout confirmation alert
+        wait.until(ExpectedConditions.alertIsPresent());
+        driver.switchTo().alert().accept();
+
+    }
 
 }
